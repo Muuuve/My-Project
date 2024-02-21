@@ -8,4 +8,4 @@ __Здравствуйте!__ :wave:
 3. Реализовать задумку с помощью программирования.
 ___
 На этом пока что всё. Спасибо за внимание!
-![](https://pin.it/1TeexjfXU)
+![]([https://pin.it/1TeexjfXU](https://abrakadabra.fun/uploads/posts/2022-02/thumbs/1645050342_5-abrakadabra-fun-p-milii-kotik-spasibo-za-vnimanie-15.jpg)https://abrakadabra.fun/uploads/posts/2022-02/thumbs/1645050342_5-abrakadabra-fun-p-milii-kotik-spasibo-za-vnimanie-15.jpg)

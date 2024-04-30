@@ -1,0 +1,32 @@
+@startuml
+
+rectangle "Пользователь" as User
+
+left to right direction
+package "Меню" {
+    rectangle "Начать игру" as StartGame
+    rectangle "Зайти в настройки" as Settings
+    rectangle "Узнать статистику предыдущих игр" as GetStatistics
+}
+
+package "Управление персонажем" {
+    rectangle "Перемещать персонажа" as MoveCharacter
+    rectangle "Собирать монеты" as GetCoins
+}
+
+package "Игровой процесс" {
+    rectangle "Получать информацию о состоянии здоровья персонажа" as GetHealth
+    rectangle "Получать информацию о собранных монетах" as CoinsInfo
+    rectangle "Проходить уровень" as PassLevel
+}
+
+User --> StartGame
+User --> Settings
+User --> GetStatistics
+User --> MoveCharacter
+User --> GetCoins
+User --> GetHealth
+User --> CoinsInfo
+User --> PassLevel
+
+@enduml

@@ -5,7 +5,7 @@ rectangle "Пользователь" as User
 left to right direction
 package "Меню" {
     rectangle "Начать игру" as StartGame
-    rectangle "Зайти в настройки" as Settings
+    rectangle "Открыть настройки" as Settings
     rectangle "Узнать статистику предыдущих игр" as GetStatistics
 }
 
@@ -25,6 +25,7 @@ User --> Settings
 User --> GetStatistics
 User --> MoveCharacter
 User --> GetCoins
+GetCoins --> CoinsInfo
 User --> GetHealth
 User --> CoinsInfo
 User --> PassLevel

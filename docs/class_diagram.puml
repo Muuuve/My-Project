@@ -1,0 +1,64 @@
+@startuml
+
+class User {
+    +openApp()
+    +selectMenuItem(menuItem: MenuItem)
+    +navigateToSettings()
+    +startGame()
+    +viewStatistics()
+}
+
+class GameMenu {
+    +displayMenu()
+    +handleMenuItemSelection(item: MenuItem)
+}
+
+class Settings {
+    +displaySettings()
+    +saveSettings(newSettings: Settings)
+}
+
+class StartGame {
+    +loadLevel(levelName: String)
+    +placeCoins()
+    +displayCharacter(character: Character)
+    +displayInfoBlock(infoBlock: InfoBlock)
+}
+
+class Statistics {
+    +displayStats(stats: Stats)
+}
+
+class CollectCoins {
+    +displayCoins(coins: Coins)
+    +updateCoinCount(newCount: Int)
+    +saveResult(result: Result)
+}
+
+class CharacterMovement {
+    +moveCharacter(direction: Direction)
+    +jump()
+}
+
+class Character {
+    +collectCoins(coins: Coins)
+    +move(direction: Direction)
+}
+
+class GameState {
+    +displayState(state: State)
+    +updateState(newState: State)
+}
+
+User --- GameMenu : uses >
+User --- CollectCoins : collects >
+User --- CharacterMovement : moves >
+User --- GameState : interacts >
+GameMenu -- "StartGame" : starts >
+GameMenu -- "Settings" : uses >
+GameMenu -- "Statistics" : views >
+
+CollectCoins --|> Character
+CharacterMovement --|> Character
+
+@enduml

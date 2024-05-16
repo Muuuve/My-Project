@@ -26,6 +26,8 @@ class StartGame {
 }
 
 class Statistics {
+    +updatetStats(stats: Stats)
+    +saveStats(stats: Stats)
     +displayStats(stats: Stats)
 }
 
@@ -50,15 +52,17 @@ class GameState {
     +updateState(newState: State)
 }
 
-User --- GameMenu : uses >
-User --- CollectCoins : collects >
-User --- CharacterMovement : moves >
-User --- GameState : interacts >
-GameMenu -- "StartGame" : starts >
-GameMenu -- "Settings" : uses >
-GameMenu -- "Statistics" : views >
+User -.-> GameMenu : uses >
+User --->  Character : uses >
+User --->  CharacterMovement : moves >
+User --->  GameState : interacts >
+GameMenu o-- "StartGame" : starts >
+GameMenu o-- "Settings" : uses >
+GameMenu o-- "Statistics" : views >
+CollectCoins --> "Statistics"
 
-CollectCoins --|> Character
+
+CollectCoins <|-- Character
 CharacterMovement --|> Character
 
 @enduml

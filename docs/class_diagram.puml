@@ -31,10 +31,15 @@ class Statistics {
     +displayStats(stats: Stats)
 }
 
-class CollectCoins {
-    +displayCoins(coins: Coins)
-    +updateCoinCount(newCount: Int)
+class CollectedCoins {
+    +displayCoinsAmount(coins: Coins)
+    +updateCoinAmount(newAmount: Int)
     +saveResult(result: Result)
+}
+
+class Coin {
+    +displayCoins(coin: Coin)
+    
 }
 
 class CharacterMovement {
@@ -43,7 +48,7 @@ class CharacterMovement {
 }
 
 class Character {
-    +collectCoins(coins: Coins)
+    +collectCoin(coin: Coin)
     +move(direction: Direction)
 }
 
@@ -53,16 +58,17 @@ class GameState {
 }
 
 User -.-> GameMenu : uses >
-User --->  Character : uses >
 User --->  CharacterMovement : moves >
 User --->  GameState : interacts >
 GameMenu o-- "StartGame" : starts >
 GameMenu o-- "Settings" : uses >
 GameMenu o-- "Statistics" : views >
-CollectCoins --> "Statistics"
+CollectedCoins --> Character
+Character --> "Statistics"
 
 
-CollectCoins <|-- Character
-CharacterMovement --|> Character
+Coin <|-- Character
+CharacterMovement ---|> Character
+Coin ---> CollectedCoins
 
 @enduml

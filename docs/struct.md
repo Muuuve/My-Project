@@ -1,4 +1,4 @@
 # Структурные модели
 ## Диаграмма классов
-* [Оффлайн файл](class_diagram.puml)
-![Диаграмма классов](class_diagram.png)
+* [Оффлайн файл](diagrams/class_diagram.puml)
+![Диаграмма классов](diagrams/class_diagram.png)

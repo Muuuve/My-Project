@@ -5,29 +5,32 @@ rectangle "Пользователь" as User
 left to right direction
 package "Меню" {
     rectangle "Начать игру" as StartGame
-    rectangle "Открыть настройки" as Settings
     rectangle "Узнать статистику предыдущих игр" as GetStatistics
+    rectangle "Выйти из игры" as ExitGame
 }
 
 package "Управление персонажем" {
     rectangle "Перемещать персонажа" as MoveCharacter
     rectangle "Собирать монеты" as GetCoins
+    rectangle "Собирать еду" as GetFood
 }
 
 package "Игровой процесс" {
     rectangle "Получать информацию о состоянии здоровья персонажа" as GetHealth
     rectangle "Получать информацию о собранных монетах" as CoinsInfo
-    rectangle "Проходить уровень" as PassLevel
+    rectangle "Проходить уровни" as PassLevels
 }
 
-User --> StartGame
-User --> Settings
+User ---> StartGame
+User --> ExitGame
 User --> GetStatistics
-User --> MoveCharacter
-User --> GetCoins
+User ---> MoveCharacter
+User ---> GetCoins
 GetCoins --> CoinsInfo
+User ---> GetFood
+GetFood --> GetHealth
 User --> GetHealth
 User --> CoinsInfo
-User --> PassLevel
+User --> PassLevels
 
 @enduml

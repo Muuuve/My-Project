@@ -13,9 +13,8 @@ class GameMenu {
     +handleMenuItemSelection(item: MenuItem)
 }
 
-class Settings {
-    +displaySettings()
-    +saveSettings(newSettings: Settings)
+class Exit {
+    +exitGame()
 }
 
 class StartGame {
@@ -42,33 +41,21 @@ class Coin {
     
 }
 
-class CharacterMovement {
-    +moveCharacter(direction: Direction)
-    +jump()
-}
-
-class Character {
+class Player {
     +collectCoin(coin: Coin)
     +move(direction: Direction)
 }
 
-class GameState {
-    +displayState(state: State)
-    +updateState(newState: State)
-}
-
 User -.-> GameMenu : uses >
-User --->  CharacterMovement : moves >
-User --->  GameState : interacts >
-GameMenu o-- "StartGame" : starts >
-GameMenu o-- "Settings" : uses >
-GameMenu o-- "Statistics" : views >
-CollectedCoins --> Character
-Character --> "Statistics"
+User --->  Player : moves >
+GameMenu o-- StartGame : starts >
+GameMenu o-- Exit : uses >
+GameMenu o-- Statistics : views >
+CollectedCoins --> Player
+Player --> Statistics
 
 
-Coin <|-- Character
-CharacterMovement ---|> Character
+Coin <|-- Player
 Coin ---> CollectedCoins
 
 @enduml

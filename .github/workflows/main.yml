@@ -28,7 +28,7 @@ jobs:
     - name: Coveralls
       uses: coverallsapp/github-action@v2
 
-sonarcloud:
+  sonarcloud:
     name: SonarCloud
     runs-on: ubuntu-latest
     steps:

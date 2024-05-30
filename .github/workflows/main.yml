@@ -21,11 +21,9 @@ jobs:
 
     - name: Run unit tests
       run: |
-        cd pygame
         coverage run -m unittest discover
         coverage xml
 
 
     - name: Coveralls
       uses: coverallsapp/github-action@v2
-      run: cd pygame

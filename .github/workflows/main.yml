@@ -25,6 +25,7 @@ jobs:
         cd pygame
         coverage run -m unittest discover
         coverage xml
+        cat coverage.xml
 
 
     - name: Coveralls

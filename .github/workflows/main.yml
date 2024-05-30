@@ -23,7 +23,7 @@ jobs:
       run: |
         cd pygame
         coverage run -m unittest discover
-        coverage xml
+        coverage xml --format=cobertura > coverage.xml
 
 
     - name: Coveralls

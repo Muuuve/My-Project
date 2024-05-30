@@ -1,4 +1,4 @@
-[![CI/CD GitHub Actions](https://github.com/Muuuve/My-Project/actions/workflows/test-action.yml/badge.svg)](https://github.com/Muuuve/My-Project/actions/workflows/test-action.yml)
+[![CI/CD GitHub Actions](https://github.com/Muuuve/My-Project/actions/workflows/test-action.yml/badge.svg)](https://github.com/Muuuve/My-Project/actions/workflows/main.yml)
 [![Coverage Status](https://coveralls.io/repos/Muuuve/My-Project/badge.svg?branch=master)](https://coveralls.io/github/Muuuve/My-Project?branch=master)
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=Muuuve_My-Project&metric=alert_status)](https://sonarcloud.io/dashboard?id=Muuuve_My-Project)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=Muuuve_My-Project&metric=bugs)](https://sonarcloud.io/summary/new_code?id=Muuuve_My-Project)

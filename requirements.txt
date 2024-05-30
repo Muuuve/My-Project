@@ -1,2 +1,2 @@
- pygame
- coverage
+pygame
+pytest-cov

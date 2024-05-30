@@ -1,208 +1,144 @@
-import pytest
+import unittest
 import pygame
 from pygame.locals import *
+from main import Player, Environment, bubble_sort, SQUARE_SIZE, PLAYER_WIDTH, PLAYER_HEIGHT
 
-# Импортируйте классы Player и Environment и bubble_sort из вашего модуля
-from main import Player, Environment, bubble_sort
+class TestBubbleSort(unittest.TestCase):
 
-"""
-    Тест сортировки базы данных
-"""
-# Positive test cases
-def test_bubble_sort_positive():
-    # Создаем список данных для сортировки
-    data = [('Result', '2024-05-29 21:31:08.858149', 18),
-            ('Result', '2024-05-29 21:31:55.009608', 15),
-            ('Result', '2024-05-29 21:33:08.846203', 5),
-            ('Result', '2024-05-29 21:34:25.103373', 18),
-            ('Result', '2024-05-29 21:35:10.472828', 16),
-            ('Result', '2024-05-29 21:35:23.823227', 1)]
-    
-    # Ожидаемый результат после сортировки
-    expected_result = [('Result', '2024-05-29 21:31:08.858149', 18),
-                       ('Result', '2024-05-29 21:34:25.103373', 18),
-                       ('Result', '2024-05-29 21:35:10.472828', 16),
-                       ('Result', '2024-05-29 21:31:55.009608', 15),
-                       ('Result', '2024-05-29 21:33:08.846203', 5),
-                       ('Result', '2024-05-29 21:35:23.823227', 1)]
-    
-    # Вызываем функцию сортировки
-    bubble_sort(data)
-    
-    # Проверяем, что результат совпадает с ожидаемым
-    assert data == expected_result
+    def setUp(self):
+        self.data = [('Result', '2024-05-29 21:31:08.858149', 18),
+                     ('Result', '2024-05-29 21:31:55.009608', 15),
+                     ('Result', '2024-05-29 21:33:08.846203', 5),
+                     ('Result', '2024-05-29 21:34:25.103373', 18),
+                     ('Result', '2024-05-29 21:35:10.472828', 16),
+                     ('Result', '2024-05-29 21:35:23.823227', 1)]
 
-def test_bubble_sort_invalid_data():
-    # Создаем список данных с некорректными элементами
-    data = [('Result', '2024-05-29 21:31:08.858149', 18),
-            ('Result', '2024-05-29 21:31:55.009608', 15),
-            ('Result', '2024-05-29 21:33:08.846203', 5),
-            ('Result', '2024-05-29 21:34:25.103373'),
-            ('Result', '2024-05-29 21:35:10.472828', 16),
-            ('Result', '2024-05-29 21:35:23.823227', 1)]
-    
-    # Проверяем, что функция вызывает исключение IndexError
-    with pytest.raises(IndexError):
-        bubble_sort(data)
+    def test_bubble_sort_positive(self):
+        bubble_sort(self.data)
+        expected_result = [('Result', '2024-05-29 21:31:08.858149', 18),
+                           ('Result', '2024-05-29 21:34:25.103373', 18),
+                           ('Result', '2024-05-29 21:35:10.472828', 16),
+                           ('Result', '2024-05-29 21:31:55.009608', 15),
+                           ('Result', '2024-05-29 21:33:08.846203', 5),
+                           ('Result', '2024-05-29 21:35:23.823227', 1)]
+        self.assertEqual(self.data, expected_result)
 
-"""
-    Тест обработки коллизии с картой
-"""
-# Игровые переменные
-SQUARE_SIZE = 20
-PLAYER_WIDTH = 20
-PLAYER_HEIGHT = 20
-# Инициализация Pygame
-pygame.init()
+    def test_bubble_sort_invalid_data(self):
+        self.data.append(('Result', '2024-05-29 21:34:25.103373'))
+        with self.assertRaises(IndexError):
+            bubble_sort(self.data)
 
-# Создание фиктивного экрана, который нужен для работы Pygame
-screen = pygame.display.set_mode((800, 600))
+class TestCollisionWithMap(unittest.TestCase):
 
-@pytest.fixture
-def environment():
-    # Создание тестовой карты данных
-    data = [
-        [1, 1, 1, 1, 1],
-        [1, 1, 0, 0, 1],
-        [1, 0, 1, 0, 1],
-        [1, 1, 1, 1, 1]
-    ]
-    return Environment(data)
+    def setUp(self):
+        pygame.init()
+        self.screen = pygame.display.set_mode((800, 600))
+        self.environment = Environment([
+            [1, 1, 1, 1, 1],
+            [1, 1, 0, 0, 1],
+            [1, 0, 1, 0, 1],
+            [1, 1, 1, 1, 1]
+        ])
+        self.player = Player(50, 100)
 
-@pytest.fixture
-def player():
-    # Создание игрока с начальной позицией
-    return Player(20, 40)
+    def test_collision_with_map_x(self):
+        self.player.dx = 5
+        self.player.dy = 0
+        collided = self.player.collision_with_map(self.environment)
+        self.assertEqual(self.player.dx, 0)
+        self.assertFalse(collided)
 
-def test_collision_with_map_x(environment, player):
-    # Устанавливаем движение игрока по оси x
-    player.dx = 5
-    player.dy = 0
+    def test_collision_with_map_y_top(self):
+        self.player.dx = 0
+        self.player.dy = -5
+        collided = self.player.collision_with_map(self.environment)
+        self.assertEqual(self.player.speed_y, 0)
+        self.assertTrue(collided)
 
-    # Проверяем столкновение с картой
-    collided = player.collision_with_map(environment)
+    def test_collision_with_map_y_bottom(self):
+        self.player.dx = 0
+        self.player.dy = 5
+        collided = self.player.collision_with_map(self.environment)
+        self.assertEqual(self.player.speed_y, 0)
+        self.assertTrue(collided)
 
-    # Проверяем, что игрок останавливается при столкновении с блоком
-    assert player.dx == 0, "Player should stop moving right when colliding with a block"
-    # Проверяем, что вертикального столкновения нет
-    assert not collided, "There should be no vertical collision"
-
-def test_collision_with_map_y_top(environment, player):
-    # Устанавливаем движение игрока по оси y вверх
-    player.dx = 0
-    player.dy = -5
-
-    # Проверяем столкновение с картой
-    collided = player.collision_with_map(environment)
-
-    # Проверяем, что вертикальная скорость игрока сбрасывается до 0 после столкновения
-    assert player.speed_y == 0, "Player's vertical speed should be reset to 0 after colliding with the top of a block"
-    # Проверяем, что столкновения с землей нет
-    assert collided, "There should be no ground collision"
-
-def test_collision_with_map_y_bottom(environment, player):
-    # Устанавливаем движение игрока по оси y вниз
-    player.dx = 0
-    player.dy = 5
-
-    # Проверяем столкновение с картой
-    collided = player.collision_with_map(environment)
-
-    # Проверяем, что вертикальная скорость игрока сбрасывается до 0 после столкновения
-    assert player.speed_y == 0, "Player's vertical speed should be reset to 0 after colliding with the bottom of a block"
-    # Проверяем, что столкновение с землей есть
-    assert collided, "There should be a ground collision"
-
-def test_no_collision(environment, player):
-    # Создаем другую тестовую карту данных
-    data = [
+    def test_no_collision(self):
+        data = [
         [1, 1, 1, 1, 1],
         [1, 0, 0, 0, 1],
         [1, 0, 0, 0, 1],
         [1, 1, 1, 1, 1]
-    ]
-    environment = Environment(data)
-    # Устанавливаем движение игрока по осям x и y
-    player.dx = 5
-    player.dy = -5
+        ]
+        self.environment = Environment(data)
+        self.player.dx = 5
+        self.player.dy = -5
+        collided = self.player.collision_with_map(self.environment)
+        self.assertFalse(collided)
 
-    # Проверяем отсутствие столкновений
-    collided = player.collision_with_map(environment)
+class TestEnvironmentMap(unittest.TestCase):
 
-    # Проверяем, что столкновений нет
-    assert not collided, "There should be no collision"
+    def setUp(self):
+        pygame.init()
+        self.water_group = pygame.sprite.Group()
+        self.door_group = pygame.sprite.Group()
+        self.coin_group = pygame.sprite.Group()
+        self.fish_group = pygame.sprite.Group()
+        
+        # Создание тестовой карты данных
+        self.data = [
+            [1, 1, 1, 1, 1],
+            [1, 1, 0, 3, 1],
+            [1, 4, 0, 5, 1],
+            [1, 6, 3, 1, 1]
+        ]
+        self.environment = Environment(self.data, self.water_group, self.door_group, self.coin_group, self.fish_group)
 
-"""
-    Тест загрузки базы данных
-"""
-@pytest.fixture
-def environment_map():
-    # Определение размера квадрата
-    global SQUARE_SIZE
-    SQUARE_SIZE = 20
-    global water_group, door_group, coin_group, fish_group
-    # Создание фиктивных групп спрайтов
-    water_group = pygame.sprite.Group()
-    door_group = pygame.sprite.Group()
-    coin_group = pygame.sprite.Group()
-    fish_group = pygame.sprite.Group()
-    
-    # Создание тестовой карты данных
-    data = [
-        [1, 1, 1, 1, 1],
-        [1, 1, 0, 3, 1],
-        [1, 4, 0, 5, 1],
-        [1, 6, 3, 1, 1]
-    ]
+    def test_right_blocks_position(self):
+        # Проверка количества блоков
+        self.assertEqual(len(self.environment.square_list), 13, "There should be exactly 13 blocks")
+        
+        # Проверка позиции и размера блока
+        block = self.environment.square_list[1]
+        self.assertEqual(block[1].x, 1 * SQUARE_SIZE, "Block x position is incorrect")
+        self.assertEqual(block[1].y, 0, "Block y position is incorrect")
+        self.assertEqual(block[1].width, SQUARE_SIZE, "Block width is incorrect")
+        self.assertEqual(block[1].height, SQUARE_SIZE, "Block height is incorrect")
 
-    return Environment(data, water_group, door_group, coin_group, fish_group)
+    def test_right_water_position(self):
+        # Проверка количества воды
+        self.assertEqual(len(self.water_group), 2, "There should be exactly 2 water")
+        
+        # Проверка позиции воды
+        water = next(iter(self.water_group))
+        self.assertEqual(water.rect.x, 3 * SQUARE_SIZE, "Water x position is incorrect")
+        self.assertEqual(water.rect.y, 1 * SQUARE_SIZE + (SQUARE_SIZE // 2), "Water y position is incorrect")
 
-def test_right_blocks_position(environment_map):
-    # Проверка количества блоков
-    assert len(environment_map.square_list) == 13, "There should be exactly 13 blocks"
-    
-    # Проверка позиции и размера блока
-    block = environment_map.square_list[1]
-    assert block[1].x == 1 * SQUARE_SIZE, "Block x position is incorrect"
-    assert block[1].y == 0, "Block y position is incorrect"
-    assert block[1].width == SQUARE_SIZE, "Block width is incorrect"
-    assert block[1].height == SQUARE_SIZE, "Block height is incorrect"
+    def test_right_doors_position(self):
+        # Проверка количества дверей
+        self.assertEqual(len(self.door_group), 1, "There should be exactly 1 door")
+        
+        # Проверка позиции двери
+        door = next(iter(self.door_group))
+        self.assertEqual(door.rect.x, 1 * SQUARE_SIZE, "Door x position is incorrect")
+        self.assertEqual(door.rect.y, 2 * SQUARE_SIZE, "Door y position is incorrect")
 
-def test_right_water_position(environment_map):
-    # Проверка количества воды
-    assert len(water_group) == 2, "There should be exactly 2 water"
-    
-    # Проверка позиции воды
-    water = next(iter(water_group))
-    assert water.rect.x == 3 * SQUARE_SIZE, "Water x position is incorrect"
-    assert water.rect.y == 1 * SQUARE_SIZE + (SQUARE_SIZE // 2), "Water y position is incorrect"
+    def test_right_coins_position(self):
+        # Проверка количества монет
+        self.assertEqual(len(self.coin_group), 1, "There should be exactly 1 coin")
+        
+        # Проверка позиции монеты
+        coin = next(iter(self.coin_group))
+        self.assertEqual(coin.rect.x, 3 * SQUARE_SIZE, "Coin x position is incorrect")
+        self.assertEqual(coin.rect.y, 2 * SQUARE_SIZE, "Coin y position is incorrect")
 
-def test_right_doors_position(environment_map):
-    # Проверка количества дверей
-    assert len(door_group) == 1, "There should be exactly 1 door"
-    
-    # Проверка позиции двери
-    door = next(iter(door_group))
-    assert door.rect.x == 1 * SQUARE_SIZE, "Door x position is incorrect"
-    assert door.rect.y == 2 * SQUARE_SIZE, "Door y position is incorrect"
+    def test_right_fish_position(self):
+        # Проверка количества рыб
+        self.assertEqual(len(self.fish_group), 1, "There should be exactly 1 fish")
+        
+        # Проверка позиции рыбы
+        fish = next(iter(self.fish_group))
+        self.assertEqual(fish.rect.x, 1 * SQUARE_SIZE, "Fish x position is incorrect")
+        self.assertEqual(fish.rect.y, 3 * SQUARE_SIZE, "Fish y position is incorrect")
 
-def test_right_coins_position(environment_map):
-    # Проверка количества монет
-    assert len(coin_group) == 1, "There should be exactly 1 coin"
-    
-    # Проверка позиции монеты
-    coin = next(iter(coin_group))
-    assert coin.rect.x == 3 * SQUARE_SIZE, "Coin x position is incorrect"
-    assert coin.rect.y == 2 * SQUARE_SIZE, "Coin y position is incorrect"
-
-def test_right_fish_position(environment_map):
-    # Проверка количества рыб
-    assert len(fish_group) == 1, "There should be exactly 1 fish"
-    
-    # Проверка позиции рыбы
-    fish = next(iter(fish_group))
-    assert fish.rect.x == 1 * SQUARE_SIZE, "Fish x position is incorrect"
-    assert fish.rect.y == 3 * SQUARE_SIZE, "Fish y position is incorrect"
-
-if __name__ == "__main__":
-    pytest.main()
+if __name__ == '__main__':
+    unittest.main()

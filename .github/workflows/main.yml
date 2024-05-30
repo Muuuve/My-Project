@@ -27,5 +27,5 @@ jobs:
 
 
     - name: Coveralls
-      run: cd pygame
       uses: coverallsapp/github-action@v2
+      run: cd pygame

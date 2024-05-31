@@ -1,0 +1,54 @@
+@startuml
+object Player {
+    dx = 0
+    dy = 0
+    speed_y = 0
+    jump = false
+    is_grounded = true
+    direction = 0
+    counter = 0
+    number = 0
+    images_r = [image1, image2, image3]
+    images_l = [image1_flipped, image2_flipped, image3_flipped]
+    image = image1
+    rect = Rect(x=100, y=100)
+    width = 50
+    height = 50
+}
+
+object Environment {
+    square_list = [(image_block, Rect(x=0, y=0)),...]
+}
+
+object Water {
+    image = water_image
+    rect = Rect(x=50, y=50)
+}
+
+object Coin {
+    image = coin_image
+    rect = Rect(x=100, y=100)
+}
+
+object Door {
+    image = door_image
+    rect = Rect(x=150, y=150)
+}
+
+object Fish {
+    image = fish_image
+    rect = Rect(x=200, y=200)
+}
+
+object Button {
+    image = button_image
+    rect = Rect(x=250, y=250)
+    clicked = false
+}
+
+Player --> Environment : uses
+Environment --> Water : contains
+Environment --> Coin : contains
+Environment --> Door : contains
+Environment --> Fish : contains
+@enduml

@@ -1,61 +1,68 @@
 @startuml
 
-class User {
-    +openApp()
-    +selectMenuItem(menuItem: MenuItem)
-    +navigateToSettings()
-    +startGame()
-    +viewStatistics()
+class Player {
+    -dx: int
+    -dy: int
+    -speed_y: int
+    -jump: bool
+    -is_grounded: bool
+    -direction: int
+    -counter: int
+    -number: int
+    -images_r: List[Surface]
+    -images_l: List[Surface]
+    -image: Surface
+    -rect: Rect
+    -width: int
+    -height: int
+    +restart(x: int, y: int): void
+    +update(): int
+    +collision_with_map(environment: Environment): bool
 }
 
-class GameMenu {
-    +displayMenu()
-    +handleMenuItemSelection(item: MenuItem)
+class Environment {
+    -square_list: List[Tuple[Surface, Rect]]
+    +__init__(): void
+    +build_map(): void
+    +draw(): void
 }
 
-class Exit {
-    +exitGame()
-}
-
-class StartGame {
-    +loadLevel(levelName: String)
-    +placeCoins()
-    +displayCharacter(character: Character)
-    +displayInfoBlock(infoBlock: InfoBlock)
-}
-
-class Statistics {
-    +updatetStats(stats: Stats)
-    +saveStats(stats: Stats)
-    +displayStats(stats: Stats)
-}
-
-class CollectedCoins {
-    +displayCoinsAmount(coins: Coins)
-    +updateCoinAmount(newAmount: Int)
-    +saveResult(result: Result)
+class Water {
+    -image: Surface
+    -rect: Rect
+    +__init__(x: int, y: int): void
 }
 
 class Coin {
-    +displayCoins(coin: Coin)
-    
+    -image: Surface
+    -rect: Rect
+    +__init__(x: int, y: int): void
 }
 
-class Player {
-    +collectCoin(coin: Coin)
-    +move(direction: Direction)
+class Door {
+    -image: Surface
+    -rect: Rect
+    +__init__(x: int, y: int): void
 }
 
-User -.-> GameMenu : uses >
-User --->  Player : moves >
-GameMenu o-- StartGame : starts >
-GameMenu o-- Exit : uses >
-GameMenu o-- Statistics : views >
-CollectedCoins --> Player
-Player --> Statistics
+class Fish {
+    -image: Surface
+    -rect: Rect
+    +__init__(x: int, y: int, number: int): void
+}
 
+class Button {
+    -image: Surface
+    -rect: Rect
+    -clicked: bool
+    +__init__(x: int, y: int, image: Surface): void
+    +draw(): bool
+}
 
-Coin <|-- Player
-Coin ---> CollectedCoins
+Player "1" -- "1..*" Environment : uses >
+Environment "1" -- "*" Water : contains >
+Environment "1" -- "*" Coin : contains >
+Environment "1" -- "*" Door : contains >
+Environment "1" -- "*" Fish : contains >
 
 @enduml
